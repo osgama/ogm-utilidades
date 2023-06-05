@@ -9,6 +9,7 @@
 		<version>3.1.0</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>com.example</groupId>
 	<artifactId>ogm-utilidades</artifactId>
 	<version>1.0.0</version>
@@ -20,6 +21,7 @@
 		<spring-boot.version>3.1.0</spring-boot.version>
 		<maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
 	</properties>
+
 	<dependencies>
 		
 		<!-- Spring Web -->
@@ -48,8 +50,6 @@
 			<artifactId>commons-compress</artifactId>
 			<version>1.23.0</version>
 		</dependency>
-
-
 	</dependencies>
 
 	<build>

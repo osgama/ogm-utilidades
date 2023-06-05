@@ -1,20 +1,12 @@
 package com.example.api;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.io.ByteArrayOutputStream;
+import java.io.*;
+import java.util.zip.*;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import com.example.model.EspecificaArchivosRequest;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
+
+import com.example.model.*;
 
 @RestController
 public class ApiEspecificaArchivos {
@@ -25,7 +17,7 @@ public class ApiEspecificaArchivos {
         List<String> nombres = request.getNombres();
         HttpHeaders headersFolder = new HttpHeaders();
         HttpHeaders headersTamaño = new HttpHeaders();
-        
+
         File folder = new File(directorio);
         if (!folder.exists() || !folder.isDirectory()) {
             headersFolder.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Archivos.zip");
@@ -37,7 +29,7 @@ public class ApiEspecificaArchivos {
 
         if (files != null) {
             try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                 ZipOutputStream zos = new ZipOutputStream(baos)) {
+                    ZipOutputStream zos = new ZipOutputStream(baos)) {
                 for (File file : files) {
                     String nombreArchivo = file.getName();
                     String nombreArchivoSinExtension = nombreArchivo.substring(0, nombreArchivo.lastIndexOf('.'));
@@ -50,9 +42,10 @@ public class ApiEspecificaArchivos {
                 byte[] zipBytes = baos.toByteArray();
                 int maxZipSize = 1024 * 1024 * 1024; // 1gb como límite de tamaño
                 if (zipBytes.length > maxZipSize) {
-                	
+
                     headersTamaño.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Archivos.zip");
-                    headersTamaño.add("X-Error-Message", "El tamaño del archivo ZIP excede el límite de 1GB permitido.");
+                    headersTamaño.add("X-Error-Message",
+                            "El tamaño del archivo ZIP excede el límite de 1GB permitido.");
                     return ResponseEntity.badRequest().headers(headersTamaño).build();
                 }
 

@@ -1,18 +1,12 @@
 package com.example.api;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import java.io.*;
+import java.util.zip.*;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
-import com.example.model.AllArchivosRequest;
-
-import java.io.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
+import com.example.model.*;
 
 @RestController
 public class ApiAllArchivos {
@@ -35,7 +29,8 @@ public class ApiAllArchivos {
             StreamingResponseBody responseBody = outputStream -> {
                 try (ZipOutputStream zos = new ZipOutputStream(outputStream)) {
                     for (File file : files) {
-                        if (parameter.equals("*") || matchesExtension(file.getName(), parameter) || file.getName().contains(parameter)) {
+                        if (parameter.equals("*") || matchesExtension(file.getName(), parameter)
+                                || file.getName().contains(parameter)) {
                             addToZip(file, zos);
                         }
                     }
@@ -45,7 +40,7 @@ public class ApiAllArchivos {
             };
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=ArchivosAll.zip");
-            return new ResponseEntity<>(responseBody, headers, HttpStatus.OK);   
+            return new ResponseEntity<>(responseBody, headers, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
