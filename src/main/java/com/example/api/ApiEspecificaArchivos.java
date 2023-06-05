@@ -20,7 +20,6 @@ public class ApiEspecificaArchivos {
 
         File folder = new File(directorio);
         if (!folder.exists() || !folder.isDirectory()) {
-            headersFolder.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Archivos.zip");
             headersFolder.add("X-Error-Message", "El directorio especificado no existe o no es válido.");
             return ResponseEntity.badRequest().headers(headersFolder).build();
         }
@@ -41,8 +40,8 @@ public class ApiEspecificaArchivos {
                 zos.close();
                 byte[] zipBytes = baos.toByteArray();
                 int maxZipSize = 1024 * 1024 * 1024; // 1gb como límite de tamaño
-                if (zipBytes.length > maxZipSize) {
 
+                if (zipBytes.length > maxZipSize) {
                     headersTamaño.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=ArchivosEspe.zip");
                     headersTamaño.add("X-Error-Message",
                             "El tamaño del archivo ZIP excede el límite de 1GB permitido.");
@@ -62,7 +61,6 @@ public class ApiEspecificaArchivos {
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

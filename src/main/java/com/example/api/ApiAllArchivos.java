@@ -19,7 +19,6 @@ public class ApiAllArchivos {
 
         File folder = new File(directory);
         if (!folder.exists() || !folder.isDirectory()) {
-            headersFolder.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=ArchivosAll.zip");
             headersFolder.add("X-Error-Message", "El directorio especificado no existe o no es válido.");
             return ResponseEntity.badRequest().headers(headersFolder).build();
         }
