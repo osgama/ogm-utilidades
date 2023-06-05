@@ -43,7 +43,7 @@ public class ApiEspecificaArchivos {
                 int maxZipSize = 1024 * 1024 * 1024; // 1gb como límite de tamaño
                 if (zipBytes.length > maxZipSize) {
 
-                    headersTamaño.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Archivos.zip");
+                    headersTamaño.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=ArchivosEspe.zip");
                     headersTamaño.add("X-Error-Message",
                             "El tamaño del archivo ZIP excede el límite de 1GB permitido.");
                     return ResponseEntity.badRequest().headers(headersTamaño).build();
