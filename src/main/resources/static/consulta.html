@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Consulta API</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .error-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Consulta API</h1>
+    <div>
+        <label for="consulta">Consulta:</label>
+        <input type="text" id="consulta" name="consulta">
+        <button onclick="realizarConsulta()">Consultar</button>
+    </div>
+    <div>
+        <h2>Resultado:</h2>
+        <table id="resultadoTabla"></table>
+    </div>
+    <div id="errorContainer"></div>
+
+    <script>
+        function realizarConsulta() {
+            var consulta = document.getElementById("consulta").value;
+
+            fetch("/consulta", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ consulta: consulta })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("No se pudo realizar la consulta.");
+                }
+                return response.json();
+            })
+            .then(data => mostrarResultado(data))
+            .catch(error => mostrarError(error));
+        }
+
+        function mostrarResultado(data) {
+            var tabla = document.getElementById("resultadoTabla");
+            tabla.innerHTML = "";
+            document.getElementById("errorContainer").innerHTML = "";
+
+            if (data.length > 0) {
+                var encabezados = Object.keys(data[0]);
+
+                var encabezadosRow = document.createElement("tr");
+                encabezados.forEach(function (encabezado) {
+                    var th = document.createElement("th");
+                    th.textContent = encabezado;
+                    encabezadosRow.appendChild(th);
+                });
+                tabla.appendChild(encabezadosRow);
+
+                data.forEach(function (fila) {
+                    var filaRow = document.createElement("tr");
+                    encabezados.forEach(function (encabezado) {
+                        var td = document.createElement("td");
+                        td.textContent = fila[encabezado];
+                        filaRow.appendChild(td);
+                    });
+                    tabla.appendChild(filaRow);
+                });
+            } else {
+                var mensajeRow = document.createElement("tr");
+                var mensajeCell = document.createElement("td");
+                mensajeCell.colSpan = encabezados.length;
+                mensajeCell.textContent = "No se encontraron resultados.";
+                mensajeRow.appendChild(mensajeCell);
+                tabla.appendChild(mensajeRow);
+            }
+        }
+
+        function mostrarError(error) {
+            document.getElementById("resultadoTabla").innerHTML = "";
+            document.getElementById("errorContainer").innerHTML = "<p class='error-message'>" + error.message + "</p>";
+        }
+    </script>
+</body>
+</html>
