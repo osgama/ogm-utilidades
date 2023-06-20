@@ -21,18 +21,21 @@ public class ApiConsulta {
     }
 
     @PostMapping("/consulta")
-    public List<Map<String, Object>> realizarConsulta(@RequestBody Map<String, String> request) {
-        String consulta = request.get("consulta");
+    public List<Map<String, Object>> realizarConsulta(@RequestBody Map<String, Object> request) {
+        String consulta = (String) request.get("consulta");
+        int pagina = (int) request.getOrDefault("pagina", 1);
+        int elementosPorPagina = (int) request.getOrDefault("elementosPorPagina", 10);
 
         if (!esConsultaSelect(consulta)) {
             throw new IllegalArgumentException("Solo se permiten consultas de selección.");
         }
+        int offset = (pagina - 1) * elementosPorPagina;
+        String consultaPaginada = consulta + " LIMIT " + elementosPorPagina + " OFFSET " + offset;
 
-        return jdbcTemplate.queryForList(consulta);
+        return jdbcTemplate.queryForList(consultaPaginada);
     }
 
     private boolean esConsultaSelect(String consulta) {
         return consultaSelectPattern.matcher(consulta).matches();
     }
 }
-
