@@ -1,41 +1,58 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Ejecución de script de shell</title>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    </head>
-    <body>
-        <h1>Ejecución de script de shell</h1>
+<head>
+    <title>Ejecución de Shell</title>
+    <script>
+        var apiUrl;
+        fetch('/api/url')
+            .then(function(response) {
+                return response.text();
+            })
+            .then(function(data) {
+                apiUrl = data;
+            })
+            .catch(function(error) {
+                console.error('Error al obtener la URL de la API:', error);
+            });
 
-        <input type="text" id="param1" placeholder="Parámetro 1">
-        <input type="text" id="param2" placeholder="Parámetro 2">
-        <input type="text" id="param3" placeholder="Parámetro 3">
-        <button onclick="executeScript()">Ejecutar script</button>
-        <div id="output"></div>
+        function executeShell() {
+            var param1 = document.getElementById("param1").value;
+            var param2 = document.getElementById("param2").value;
+            var param3 = document.getElementById("param3").value;
 
-        <script>
-            function executeScript() {
-                var param1 = document.getElementById("param1").value;
-                var param2 = document.getElementById("param2").value;
-                var param3 = document.getElementById("param3").value;
+            var eventSource = new EventSource(apiUrl + param1 + "/" + param2 + "/" + param3);
+            eventSource.timeout = 0;
 
-                var eventSource = new EventSource("http://localhost:8080/api/execute/stream/" + param1 + "/" + param2 + "/" + param3); // Reemplaza con la URL correcta de tu API
-                eventSource.timeout = 0; // Desactiva el tiempo de espera
+            eventSource.onmessage = function(event) {
+                var outputDiv = document.getElementById("output");
+                outputDiv.innerHTML += event.data + "<br>";
 
-                eventSource.onmessage = function (event) {
-                    var outputDiv = document.getElementById("output");
-                    outputDiv.innerHTML += event.data + "<br>";
-
-                    // Verifica si el mensaje recibido indica que el script ha finalizado
-                    if (event.data === "Script finalizado") {
-                        eventSource.close(); // Cierra la conexión
-                    }
-                };
-
-                eventSource.onerror = function () {
+                if (event.data === "Script finalizado") {
                     eventSource.close();
-                };
-            }
-        </script>
-    </body>
+                }
+            };
+
+            eventSource.onerror = function() {
+                eventSource.close();
+            };
+        }
+    </script>
+</head>
+<body>
+    <h1>Ejecución de Shell</h1>
+    <div>
+        <label for="param1">Parámetro 1:</label>
+        <input type="text" id="param1">
+    </div>
+    <div>
+        <label for="param2">Parámetro 2:</label>
+        <input type="text" id="param2">
+    </div>
+    <div>
+        <label for="param3">Parámetro 3:</label>
+        <input type="text" id="param3">
+    </div>
+    <button onclick="executeShell()">Ejecutar</button>
+    <div id="output"></div>
+</body>
 </html>
