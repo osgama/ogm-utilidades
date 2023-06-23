@@ -24,7 +24,7 @@ public class ApiConsulta {
     public List<Map<String, Object>> realizarConsulta(@RequestBody Map<String, Object> request) {
         String consulta = (String) request.get("consulta");
         int pagina = (int) request.getOrDefault("pagina", 1);
-        int elementosPorPagina = (int) request.getOrDefault("elementosPorPagina", 10);
+        int elementosPorPagina = (int) request.getOrDefault("elementosPorPagina", 100);
 
         if (!esConsultaSelect(consulta)) {
             throw new IllegalArgumentException("Solo se permiten consultas de selección.");
