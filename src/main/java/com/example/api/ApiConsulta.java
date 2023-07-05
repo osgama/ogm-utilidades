@@ -1,6 +1,5 @@
 package com.example.api;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +14,6 @@ public class ApiConsulta {
     private final JdbcTemplate jdbcTemplate;
     private final Pattern consultaSelectPattern = Pattern.compile("^(?i)SELECT.*$");
 
-    @Autowired
     public ApiConsulta(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
