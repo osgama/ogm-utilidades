@@ -6,8 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.1.1</version>
-        <relativePath/>
-        <!-- lookup parent from repository -->
+        <relativePath/><!-- lookup parent from repository -->
     </parent>
 
     <groupId>com.example</groupId>
@@ -101,7 +100,7 @@
         <dependency>
             <groupId>com.oracle.ojdbc</groupId>
             <artifactId>ojdbc8</artifactId>
-            <version>19.3.1.1</version>
+            <version>19.3.0.0</version>
         </dependency>
     </dependencies>
 
