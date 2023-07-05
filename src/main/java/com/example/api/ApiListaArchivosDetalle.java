@@ -1,6 +1,5 @@
 package com.example.api;
 
-
 import java.text.SimpleDateFormat;
 import java.util.*;
 import org.springframework.http.*;
@@ -12,7 +11,6 @@ import com.example.model.*;
 
 @RestController
 public class ApiListaArchivosDetalle {
-
 
     @PostMapping("/api/lista/detalle")
     public ResponseEntity<List<String>> listFiles(@RequestBody ListaArchivosRequest request) {
@@ -49,14 +47,40 @@ public class ApiListaArchivosDetalle {
         }
         builder.append(getPermissionString(file));
         builder.append(" ");
-        builder.append(String.format("%-20s", file.getName()));
-        builder.append(getFormattedFileSize(file.length()));
+        builder.append(String.format("%-8s", getOwner(file)));
+        builder.append(String.format("%-8s", getGroup(file)));
+        builder.append(String.format("%-10s", getFormattedFileSize(file.length())));
         builder.append(" ");
         builder.append(new SimpleDateFormat("dd-MM-yyyy").format(new Date(file.lastModified())));
-        builder.append(file.isDirectory() ? " FOLDER" : " FILE");
+        builder.append(" ");
+        builder.append(file.getName());
         builder.append(" ");
 
         return builder.toString();
+    }
+
+    private String getOwner(File file) {
+        try {
+            FileOwnerAttributeView ownerAttributeView = Files.getFileAttributeView(file.toPath(),
+                    FileOwnerAttributeView.class);
+            UserPrincipal owner = ownerAttributeView.getOwner();
+            return owner.getName();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Unknown Owner";
+        }
+    }
+
+    private String getGroup(File file) {
+        try {
+            PosixFileAttributeView posixAttributeView = Files.getFileAttributeView(file.toPath(),
+                    PosixFileAttributeView.class);
+            GroupPrincipal group = posixAttributeView.readAttributes().group();
+            return group.getName();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Unknown Group";
+        }
     }
 
     private String getPermissionString(File file) {
@@ -75,7 +99,7 @@ public class ApiListaArchivosDetalle {
     }
 
     private String getFormattedFileSize(long size) {
-        String[] units = {"B", "KB", "MB", "GB", "TB"};
+        String[] units = { "B", "KB", "MB", "GB", "TB" };
         int unitIndex = 0;
         double fileSize = size;
 
