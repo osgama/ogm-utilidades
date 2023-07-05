@@ -1,0 +1,37 @@
+{"properties": [
+  {
+    "name": "management.address",
+    "type": "java.lang.String",
+    "description": "A description for 'management.address'"
+  },
+  {
+    "name": "management.port",
+    "type": "java.lang.String",
+    "description": "A description for 'management.port'"
+  },
+  {
+    "name": "endpoints.info.sensitive",
+    "type": "java.lang.String",
+    "description": "A description for 'endpoints.info.sensitive'"
+  },
+  {
+    "name": "endpoints.info.enable",
+    "type": "java.lang.String",
+    "description": "A description for 'endpoints.info.enable'"
+  },
+  {
+    "name": "endpoints.health.sensitive",
+    "type": "java.lang.String",
+    "description": "A description for 'endpoints.health.sensitive'"
+  },
+  {
+    "name": "endpoints.health.enable",
+    "type": "java.lang.String",
+    "description": "A description for 'endpoints.health.enable'"
+  },
+  {
+    "name": "management.security.enable",
+    "type": "java.lang.String",
+    "description": "A description for 'management.security.enable'"
+  }
+]}

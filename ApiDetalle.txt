@@ -1,4 +1,0 @@
-[  
-"-rw-r--r-- usuario1  grupo1 10.00 KB 04-07-2023 example_file.txt",  
-"-rw-r--r--  example_image.jpg  2.45 MB   02-15-2023  usuario2  grupo2"
-]
