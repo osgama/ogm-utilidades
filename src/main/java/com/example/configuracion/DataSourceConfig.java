@@ -1,6 +1,7 @@
 package com.example.configuracion;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.sql.init.dependency.DependsOnDatabaseInitialization;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -20,12 +21,14 @@ public class DataSourceConfig {
 
     @Profile("dev")
     @Bean
+    @DependsOnDatabaseInitialization
     public DriverManagerDataSource devDataSource() {
         return createDataSource();
     }
 
     @Profile("prod")
     @Bean
+    @DependsOnDatabaseInitialization
     public DriverManagerDataSource prodDataSource() {
         return createDataSource();
     }

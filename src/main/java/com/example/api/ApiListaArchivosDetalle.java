@@ -47,9 +47,9 @@ public class ApiListaArchivosDetalle {
         }
         builder.append(getPermissionString(file));
         builder.append(" ");
-        builder.append(String.format("%-8s", getOwner(file)));
-        builder.append(String.format("%-8s", getGroup(file)));
-        builder.append(String.format("%-10s", getFormattedFileSize(file.length())));
+        builder.append("%-8s".formatted(getOwner(file)));
+        builder.append("%-8s".formatted(getGroup(file)));
+        builder.append("%-10s".formatted(getFormattedFileSize(file.length())));
         builder.append(" ");
         builder.append(new SimpleDateFormat("dd-MM-yyyy").format(new Date(file.lastModified())));
         builder.append(" ");
@@ -107,6 +107,6 @@ public class ApiListaArchivosDetalle {
             fileSize /= 1024;
             unitIndex++;
         }
-        return String.format("%.2f %s", fileSize, units[unitIndex]);
+        return "%.2f %s".formatted(fileSize, units[unitIndex]);
     }
 }
